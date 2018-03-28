@@ -146,8 +146,9 @@ public class MakeRuns
 					{
 						System.out.print(heap.size() + " ");
 						heap.add(badHeap[i]);
-						//System.out.print(badHeap[i] + " ");
-						
+						badHeap[i] = null;
+
+						//EXCEPTION THROWN
 					}
 					
 					
