@@ -137,26 +137,35 @@ public class MakeRuns
 					System.out.println("");
 					
 					//add all elements in bad heap back into heap
-					writer.close();
+					//
+					writer.write(System.lineSeparator());
+					
+					//writer.close();
+					
 					maxHeapSize = totalSize;
 					badHeapIndex = 0;
 					System.out.println(badHeap.length);
 					System.out.println(heap.size());
+					currentRun = "";
 					for(int i = 0;i<badHeap.length;i++)
 					{
-						System.out.print(heap.size() + " ");
-						heap.add(badHeap[i]);
-						badHeap[i] = null;
+						if(badHeap[i] != null)
+						{
+							System.out.print(heap.size() + " ");
+							heap.add(badHeap[i]);
+							badHeap[i] = null;
+						}
+						
 
-						//EXCEPTION THROWN
+						//Infinite loop
 					}
 					
 					
 				}
-
+			
 
 			}
-
+			writer.close();
 			
 		}
 		catch(Exception e)
