@@ -15,9 +15,8 @@ public class MakeRuns
 	private String currentRun;
 	private String[] badHeap;
 	private String line;
-	private int temp;
-	//String line;
-	//String[] words;
+	private int runCounter;
+	
 	public static void main(String[] args)
 	{
 		try
@@ -37,136 +36,117 @@ public class MakeRuns
 		totalSize = Integer.parseInt(args[0]);
 		maxHeapSize = totalSize;
 		fileName = args[1];
-		//currentRun = new String[maxHeapSize * 3];
+
 		badHeap = new String[maxHeapSize];
 		//creates a new instance of the minheap object
 		PriorityQueue<String> heap = new PriorityQueue(maxHeapSize);
 		
-		//adds x number of elements to heap
+
 		try
 		{
+			//initialise all variables
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			BufferedWriter writer = new BufferedWriter(new FileWriter("Runs.txt"));
-			//fills the heap
-			while(heap.size() < maxHeapSize)
-			{
-				line = br.readLine();
-				String[] words = line.split(" ");
-			
-				for(int i = 0; i<words.length;i++)
-				{
-					
-					if(heap.size() < maxHeapSize)
-					{
-			
-						heap.add(words[i]);	
-						temp = i;
-						
-						//add 1 new item to hep, replacing the old one
-						
-					}
-					else	
-					{
-						break;
-					}
-				
-				}
-			}
-			
-			for(String item : heap) {System.out.println(item);}
-			System.out.println("   ");
-			String words[] = line.split(" ");
-			//current run is empty
+			String[] words;
+			runCounter = 1;
+			badHeapIndex = 0;
 			currentRun = "";
+			int count = 0;
 			
-			//while not ends of file
-			while(line != null)
+			//loop until end of file
+			while((line = br.readLine()) != null) 
 			{
-				System.out.print(currentRun + " ");
-				//remove top item
-				String a = heap.peek(); 
-				//System.out.println(a);
-				//System.out.println(badHeap[16]);
 				
-				///CHECK TOP ITEM IN HEAP AND ADD IT TO RUN
-				//if current run is empty
-				if(currentRun == "")
+				words = line.split(" ");
+				
+				for(int i = 0;i < words.length; i++)
 				{
-					//set last item in run
-					currentRun = heap.poll();
-					writer.write(currentRun + " ");
-				}
-				//if next item is larger than last item in run
-				else if(currentRun.compareTo(a)<= 0)
-				{
-					currentRun = heap.poll();
-					//add new item
-					
-					if(temp >= words.length)
-						{
-							line = br.readLine();
-							words = line.split(" ");
-							temp = 0;
-						}
-						heap.add(words[temp]);
-						temp++;
-						writer.write(currentRun + " ");
-				}
-				//item is smaller, move to bad heap and reduce size of heap
-				else
-				{
-					if(badHeap[0] == null)
+
+					//if heap is smaller than max size but not 0
+					if(heap.size() < maxHeapSize && maxHeapSize > 0)
 					{
-						badHeap[0] = heap.poll();
-						badHeapIndex = 1;
-						maxHeapSize --;
+						//add an item to the heap
+						heap.add(words[i]);
+						
 					}
+					//heap is at max size
+					else if(heap.size() == maxHeapSize && maxHeapSize > 0)
+					{
+						String first = heap.peek();
+						
+						//if first item is larger than last item in current run or current run is empty
+						if(currentRun.compareTo(first)<= 0 || currentRun == "")
+						{
+							//append the item to the current run
+							currentRun = heap.poll();
+							writer.write(currentRun + " ");
+						}
+						//else item must be smaller than last item
+						else
+						{
+							//add item to bad heap, decrement heap size and increment index of bad heap
+							badHeap[badHeapIndex] = heap.poll();
+							maxHeapSize--;
+							badHeapIndex++;
+						}
+					}
+					//heap is 0
 					else
 					{
-						badHeap[badHeapIndex] = heap.poll();
-						badHeapIndex++;
-						maxHeapSize--;
-					}
-				}
-				
-				///CHECK IF THE HEAP IS NOW EMPTY
-				//if heap is empty
-				//if(heap.peek() == null)
-				if(heap.size() == 0)
-				{
-					System.out.println("");
-					
-					//add all elements in bad heap back into heap
-					//
-					writer.write(System.lineSeparator());
-					
-					//writer.close();
-					
-					maxHeapSize = totalSize;
-					badHeapIndex = 0;
-					System.out.println(badHeap.length);
-					System.out.println(heap.size());
-					currentRun = "";
-					for(int i = 0;i<badHeap.length;i++)
-					{
-						if(badHeap[i] != null)
+						//end run
+						writer.write(System.lineSeparator());
+						runCounter++;
+						currentRun = "";
+						badHeapIndex = 0;
+						maxHeapSize = totalSize;
+						
+						for(int j = 0; j < badHeap.length; j++)
 						{
-							System.out.print(heap.size() + " ");
-							heap.add(badHeap[i]);
-							badHeap[i] = null;
+							heap.add(badHeap[j]);
+							badHeap[j] = null;
+							
 						}
 						
-
-						
 					}
-					
-					
-				}
-				//Infinite loop
 
+
+				}
+				
 			}
+			//new run
+			writer.write(System.lineSeparator());
+			runCounter++;
+			//take as many elements as possible out of the bad heap
+			for(int j = 0; j<badHeap.length;j++)
+			{
+				if(badHeap[j]!=null && heap.size() < maxHeapSize)
+					heap.add(badHeap[j]);			
+			}
+			//print a run
+			while(heap.size() > 0)
+			{
+				currentRun = heap.poll();
+				writer.write(currentRun + " ");
+				
+			}
+			//put all elements into heap
+			for(int j = 0; j<badHeap.length;j++)
+			{
+				if(badHeap[j]!=null)
+					heap.add(badHeap[j]);			
+			}
+			//new run
+			writer.write(System.lineSeparator());
+			runCounter++;
+			//print last run
+			while(heap.size() > 0)
+			{
+				currentRun = heap.poll();
+				writer.write(currentRun + " ");
+			}
+			//close writer and print the number of runs produced
 			writer.close();
-			
+			System.err.println("Runs : " + runCounter);
 		}
 		catch(Exception e)
 		{
