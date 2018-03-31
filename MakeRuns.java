@@ -54,7 +54,7 @@ public class MakeRuns
 			badHeapIndex = 0;
 			currentRun = "";
 			int count = 0;
-			writer.write("\4");
+			writer.write("\4" + System.lineSeparator());
 			//loop until end of file
 			while((line = br.readLine()) != null) 
 			{
@@ -102,7 +102,7 @@ public class MakeRuns
 					else
 					{
 						//end run
-						writer.write(System.lineSeparator() + "\4");
+						writer.write(System.lineSeparator() + "\4" + System.lineSeparator());
 						runCounter++;
 						currentRun = "";
 						badHeapIndex = 0;
@@ -121,7 +121,7 @@ public class MakeRuns
 				}
 				
 			}
-			writer.write(System.lineSeparator() + "\4");
+			writer.write(System.lineSeparator() + "\4" + System.lineSeparator());
 			runCounter++;
 			for(int j = 0; j<badHeap.length;j++)
 			{
@@ -135,19 +135,23 @@ public class MakeRuns
 				writer.write(currentRun + " ");
 				
 			}
-
-			for(int j = 0; j<badHeap.length;j++)
+			
+			if(badHeap[0] != null)
 			{
-				if(badHeap[j]!=null)
+				for(int j = 0; j<badHeap.length;j++)
+				{
+					if(badHeap[j]!=null)
 					heap.add(badHeap[j]);			
+				}
+				writer.write(System.lineSeparator() + "\4" + System.lineSeparator());
+				runCounter++;
+				while(heap.size() > 0)
+				{
+					currentRun = heap.poll();
+					writer.write(currentRun + " ");
+				}
 			}
-			writer.write(System.lineSeparator() + "\4");
-			runCounter++;
-			while(heap.size() > 0)
-			{
-				currentRun = heap.poll();
-				writer.write(currentRun + " ");
-			}
+			
 
 			writer.close();
 			System.err.println("Runs : " + runCounter);
