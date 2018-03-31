@@ -100,7 +100,7 @@ public class MakeRuns
 					else
 					{
 						//end run
-						writer.write(System.lineSeparator());
+						writer.write(System.lineSeparator() + "\4");
 						runCounter++;
 						currentRun = "";
 						badHeapIndex = 0;
@@ -119,7 +119,7 @@ public class MakeRuns
 				}
 				
 			}
-			writer.write(System.lineSeparator());
+			writer.write(System.lineSeparator() + "\4");
 			runCounter++;
 			for(int j = 0; j<badHeap.length;j++)
 			{
@@ -139,7 +139,7 @@ public class MakeRuns
 				if(badHeap[j]!=null)
 					heap.add(badHeap[j]);			
 			}
-			writer.write(System.lineSeparator());
+			writer.write(System.lineSeparator() + "\4");
 			runCounter++;
 			while(heap.size() > 0)
 			{
