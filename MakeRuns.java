@@ -1,3 +1,5 @@
+//Jason Cutts 1288205
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.BufferedWriter;
@@ -52,7 +54,7 @@ public class MakeRuns
 			badHeapIndex = 0;
 			currentRun = "";
 			int count = 0;
-			
+			writer.write("\4");
 			//loop until end of file
 			while((line = br.readLine()) != null) 
 			{
