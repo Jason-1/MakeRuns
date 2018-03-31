@@ -18,8 +18,7 @@ public class MakeRuns
 	private String[] badHeap;
 	private String line;
 	private int runCounter;
-	//String line;
-	//String[] words;
+	
 	public static void main(String[] args)
 	{
 		try
@@ -121,6 +120,7 @@ public class MakeRuns
 				}
 				
 			}
+			//takes all elements out of the bad heap and fills the heap
 			writer.write(System.lineSeparator() + "\4" + System.lineSeparator());
 			runCounter++;
 			for(int j = 0; j<badHeap.length;j++)
@@ -128,14 +128,14 @@ public class MakeRuns
 				if(badHeap[j]!=null && heap.size() < maxHeapSize)
 					heap.add(badHeap[j]);			
 			}
-		
+			//outputs the entire heap as a run
 			while(heap.size() > 0)
 			{
 				currentRun = heap.poll();
 				writer.write(currentRun + " ");
 				
 			}
-			
+			//if the bad heap still has any elements, make last run
 			if(badHeap[0] != null)
 			{
 				for(int j = 0; j<badHeap.length;j++)
@@ -156,7 +156,6 @@ public class MakeRuns
 			writer.close();
 			System.err.println("Runs : " + runCounter);
 			
-			//for(String item : heap){System.out.println(item);}
 		}
 		catch(Exception e)
 		{
